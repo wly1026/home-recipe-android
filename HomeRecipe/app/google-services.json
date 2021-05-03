@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "286864352856",
+    "project_id": "home-recipe-f52fb",
+    "storage_bucket": "home-recipe-f52fb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:286864352856:android:0595cb1ec4253fecde4c2d",
+        "android_client_info": {
+          "package_name": "com.wly.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "286864352856-6bjh0qmt29fpad4kvg277nutrotb2ki6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSOrs8BDktg_BeYWb1jOfsNkhfmg1PTlE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "286864352856-6bjh0qmt29fpad4kvg277nutrotb2ki6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

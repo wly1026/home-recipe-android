@@ -90,7 +90,6 @@ class UserListActivity : AppCompatActivity() {
     }
 
     private fun draw(map: Map<String, String>) {
-//        val bitmap = getBitmapFromURL(map["imageURL"])
 
         val imageView = ImageView(applicationContext)
         imageView.layoutParams = ViewGroup.LayoutParams(
@@ -113,9 +112,6 @@ class UserListActivity : AppCompatActivity() {
         textView.text = map["message"] as String
         linLayout.addView(textView)
 
-//        val textViewUser = TextView(applicationContext)
-//        textViewUser.setText(`object`.get("username").toString())
-//        linLayout.addView(textViewUser)
     }
 
     class ImageDownloader : AsyncTask<String?, Void?, Bitmap?>() {

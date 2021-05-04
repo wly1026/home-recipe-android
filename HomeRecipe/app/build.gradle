@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.wly.myapplication"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -48,6 +48,18 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx'
     implementation 'com.google.firebase:firebase-database-ktx'
+
+    implementation 'com.firebaseui:firebase-ui-auth:6.4.0'
+
+    // Required only if Facebook login support is required
+    // Find the latest Facebook SDK releases here: https://goo.gl/Ce5L94
+    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
+
+    implementation 'com.facebook.android:facebook-login:[8.1)'
+
+    // enable app configuration known as multidex
+    implementation 'com.android.support:multidex:1.0.3'
+
 
 }
 

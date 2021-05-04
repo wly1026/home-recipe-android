@@ -34,6 +34,7 @@ class CreatePostActivity : AppCompatActivity() {
     var image: ImageView? = null
     var imageName = UUID.randomUUID().toString() + ".jpg"  //????
     var imageUrl: String = ""
+    var uploadImage = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,13 +66,14 @@ class CreatePostActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        val bitmap: Bitmap? = null
+        var bitmap: Bitmap? = null
         // show the image
         val selectedImage = data!!.data
         if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
             try {
-                val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImage)
+                bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImage)
                 image!!.setImageBitmap(bitmap)
+                uploadImage = true
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -92,18 +94,23 @@ class CreatePostActivity : AppCompatActivity() {
                 Toast.makeText(this, "UploadFailed", Toast.LENGTH_SHORT).show()
             }).addOnSuccessListener(OnSuccessListener<UploadTask.TaskSnapshot> { taskSnapshot ->
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                if (taskSnapshot.metadata != null) {
-                    if (taskSnapshot.metadata!!.reference != null) {
-                        val result = taskSnapshot.storage.downloadUrl
-                        result.addOnSuccessListener { uri ->
-                            imageUrl = uri.toString()
-                            //createNewPost(imageUrl);
-                        }
-                    }
-                }
-                Log.i("URL", imageUrl)
+                Toast.makeText(this, "UploadSuccess", Toast.LENGTH_SHORT).show()
             })
 
+            val urlTask = uploadTask.continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
+                }
+                mountainsRef.downloadUrl
+            }.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    imageUrl = task.result.toString()
+                } else {
+                    Log.i("Fail", "Fail get url")
+                }
+            }
         } else {
             Log.i("Fail", "Can not show image")
         }
@@ -123,26 +130,32 @@ class CreatePostActivity : AppCompatActivity() {
     }
 
     fun post(view: View?) {
-        // store data in database
-        val key = FirebaseAuth.getInstance().currentUser!!.uid
-        val postMap: Map<String, String> = mapOf(
-            "imageName" to imageName,
-            "imageURL" to imageUrl,
-            "message" to content?.text.toString()
-        )
+        if (!uploadImage || content?.text.toString().equals("")) {
+            Toast.makeText(this, "Message or image is empty!", Toast.LENGTH_SHORT).show()
+        } else {
+            // store data in database
+            val key = FirebaseAuth.getInstance().currentUser!!.uid
+            val postMap: Map<String, String> = mapOf(
+                "imageName" to imageName,
+                "imageURL" to imageUrl,
+                "message" to content?.text.toString()
+            )
 
-        FirebaseDatabase.getInstance().reference
-            .child("users")
-            .child("$key")
-            .child("posts").push().setValue(postMap)
+            // put the post the posts/
+            FirebaseDatabase.getInstance().reference.child("posts").child("$key").push().setValue(
+                postMap
+            )
 
-        //startActivity(Intent(this, UserListActivity::class.java))
+
+            startActivity(Intent(this, UserListActivity::class.java))
+        }
     }
 
-    fun cancel(view: View?) {
-        // TODO
-        // add an alert window
-        startActivity(Intent(applicationContext, UserListActivity::class.java))
-    }
+//    fun cancel(view: View?) {
+//        // TODO
+//        // add an alert window
+//        startActivity(Intent(applicationContext, UserListActivity::class.java))
+//    }
 
 }
+

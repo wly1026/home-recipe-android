@@ -41,13 +41,13 @@ class ContactsActivity : AppCompatActivity() {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val userKey = snapshot.key
                 Log.i("user", userKey.toString())
-                if (!key.equals(userKey.toString())) {
-                    emails?.add(snapshot.child("email").value as String)
-                    keys?.add(userKey.toString())
 
-                    // update checked button
-                    updateFollowing(userKey!!, followingRef, (keys?.size?.minus(1)))
-                }
+                emails?.add(snapshot.child("email").value as String)
+                keys?.add(userKey.toString())
+
+                // update checked button
+                updateFollowing(userKey!!, followingRef, (keys?.size?.minus(1)))
+
                 arrayAdapter.notifyDataSetChanged()
             }
 
@@ -85,7 +85,7 @@ class ContactsActivity : AppCompatActivity() {
                 if (snapshot.exists()) {
                     if (pos != null) {
                         listView?.setItemChecked(pos, true)
-                    };
+                    }
                 }
             }
 

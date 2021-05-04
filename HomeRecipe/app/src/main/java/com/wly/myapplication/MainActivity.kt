@@ -83,13 +83,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
                     if (task.isSuccessful) {
                         Log.d("Success", "createUserWithEmail:success")
                         val user = auth.currentUser
-                        FirebaseDatabase.getInstance().reference.child("users").child(user.uid)
-                            .child("email").setValue(email.text.toString())
+                        val userRef = FirebaseDatabase.getInstance().reference.child("users").child(
+                            user.uid
+                        )
+                        userRef.child("email").setValue(email.text.toString())
+
+                        // set the user as self following
+                        userRef.child("following").push().setValue(user.uid)
+
                         showUserList()
                     } else {
                         Log.w("Fail", "createUserWithEmail:failure", task.exception)
-                        Toast.makeText(baseContext, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            baseContext, "Authentication failed.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
     }
@@ -104,8 +112,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w("Fail", "signInWithEmail:failure", task.exception)
-                        Toast.makeText(baseContext, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            baseContext, "Authentication failed.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
     }
